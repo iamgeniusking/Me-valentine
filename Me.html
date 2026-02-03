@@ -32,8 +32,6 @@ body {
 #confettiCanvas {
   position: fixed;
   inset: 0;
-  width: 100vw;
-  height: 100vh;
   pointer-events: none;
   z-index: 9999;
 }
@@ -48,15 +46,21 @@ body {
   box-shadow: 0 18px 60px rgba(0,0,0,.15);
 }
 
-.art {
-  width: min(260px, 80vw);
-  margin: 0 auto 10px;
+/* MIIMI PHOTO */
+.photo {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin: 10px auto 16px;
   display: block;
+  border: 5px solid #fff;
+  box-shadow: 0 10px 30px rgba(255,59,122,.45);
 }
 
 h1 {
-  font-size: clamp(26px, 4vw, 44px);
-  margin: 12px 0 18px;
+  font-size: clamp(26px, 4vw, 42px);
+  margin: 10px 0 18px;
 }
 
 .button-zone {
@@ -71,15 +75,13 @@ button {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  padding: 16px 24px;
+  padding: 16px 26px;
   font-size: 18px;
   font-weight: 800;
   border-radius: 999px;
   border: none;
   cursor: pointer;
   box-shadow: 0 10px 24px rgba(0,0,0,.14);
-  user-select: none;
-  -webkit-tap-highlight-color: transparent;
 }
 
 #yesBtn {
@@ -116,7 +118,10 @@ button {
 
 <main class="card">
 
-<h1>Miimi will you be my Valentine?</h1>
+<!-- MIIMI PHOTO -->
+<img src="miimi.jpg" alt="Miimi" class="photo">
+
+<h1 id="question">Miimi will you be my Valentine?</h1>
 
 <section class="button-zone" id="zone">
   <button id="yesBtn">Yes</button>
@@ -126,7 +131,7 @@ button {
 <div class="hint" id="hint">“No” seems a bit shy 😈</div>
 
 <section class="result" id="result">
-  <h2>YAY! Thanks for being my first Valentine 🎉</h2>
+  <h2>YAY! 🎉 Thanks for being my first Valentine 💖</h2>
 </section>
 
 </main>
@@ -137,31 +142,34 @@ const yesBtn = document.getElementById("yesBtn");
 const noBtn = document.getElementById("noBtn");
 const result = document.getElementById("result");
 const hint = document.getElementById("hint");
+const question = document.getElementById("question");
 
 const confettiCanvas = document.getElementById("confettiCanvas");
-
-function resizeCanvas() {
-  confettiCanvas.width = window.innerWidth;
-  confettiCanvas.height = window.innerHeight;
-}
-resizeCanvas();
+confettiCanvas.width = innerWidth;
+confettiCanvas.height = innerHeight;
 
 const confettiInstance = confetti.create(confettiCanvas, { resize: true });
 
 zone.addEventListener("pointermove", e => {
-  const rect = noBtn.getBoundingClientRect();
-  const dx = rect.left - e.clientX;
-  const dy = rect.top - e.clientY;
-  if (Math.hypot(dx, dy) < 120) {
+  const b = noBtn.getBoundingClientRect();
+  const d = Math.hypot(
+    (b.left + b.width/2) - e.clientX,
+    (b.top + b.height/2) - e.clientY
+  );
+  if (d < 130) {
     noBtn.style.left = Math.random() * 70 + "%";
   }
 });
 
 yesBtn.addEventListener("click", () => {
+  // HIDE QUESTION AND BUTTONS
   zone.style.display = "none";
   hint.style.display = "none";
+  question.style.display = "none";
+
+  // SHOW RESULT AND CONFETTI
   result.style.display = "block";
-  confettiInstance({ particleCount: 250, spread: 120 });
+  confettiInstance({ particleCount: 300, spread: 120 });
 });
 </script>
 
